@@ -2,23 +2,18 @@ package com.example.springwithsecurity.security;
 
 import com.example.springwithsecurity.entity.Role;
 import com.example.springwithsecurity.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 public class UserDetailsImpl implements UserDetails {
     private User user;
+
+    public UserDetailsImpl(User user) {
+        this.user = user;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<GrantedAuthority> roles = new ArrayList<>();

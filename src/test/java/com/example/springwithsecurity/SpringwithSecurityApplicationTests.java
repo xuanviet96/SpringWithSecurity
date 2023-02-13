@@ -23,8 +23,8 @@ class SpringwithSecurityApplicationTests {
 	@Test
 	void testCreateUser() {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String password =passwordEncoder.encode("123");
-		User newUser = new User("thanhtu@email.com", password);
+		String password =passwordEncoder.encode("Tuoi95");
+		User newUser = new User("test@email.com", password);
 		User savedUser = userRepository.save(newUser);
 		assertThat(savedUser).isNotNull();
 		assertThat(savedUser.getUserId()).isGreaterThan(0);
