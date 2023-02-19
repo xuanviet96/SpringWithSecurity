@@ -7,6 +7,7 @@ import com.example.springwithsecurity.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,7 +48,15 @@ public class UserController {
         }
     }
     @GetMapping("/api/greeting")
-    public String greeting(){
-        return ResponseEntity.ok().toString();
+//    @PreAuthorize("hasAnyRole('USER')")
+    public ResponseEntity<String> greeting(){
+        String message = "this enpoint for user only";
+        return ResponseEntity.ok().body(message);
+    }
+    @GetMapping("/api/hello")
+//    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<String> hello(){
+        String message = "this enpoint for admin only";
+        return ResponseEntity.ok().body(message);
     }
 }

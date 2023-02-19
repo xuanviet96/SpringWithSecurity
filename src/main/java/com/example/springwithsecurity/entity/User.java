@@ -30,11 +30,16 @@ public class User {
     @ManyToMany (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable (name = "users_roles",
             joinColumns = @JoinColumn (name = "user_id"),
-            inverseJoinColumns = @JoinColumn (name = "roles_id"))
+            inverseJoinColumns = @JoinColumn (name = "role_id"))
     private Set<Role> roles = new HashSet<>();
-    public User(String email, String password){
+    public User(String email, String fullname, String password){
         this.email = email;
         this.password = password;
+        this.fullname = fullname;
+    }
+    public void addRole(String roleName) {
+        Role newRole = new Role(roleName);
+        this.roles.add(newRole);
     }
 
 }
