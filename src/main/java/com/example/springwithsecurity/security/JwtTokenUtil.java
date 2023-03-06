@@ -19,7 +19,7 @@ public class JwtTokenUtil {
     @Value("${jwt.secret}")
     private String SECRET_KEY;
 
-    public String generateToken(UserDetailsImpl userDetails) {
+    public String generateToken(CustomUserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .claim("roles", userDetails.getAuthorities()

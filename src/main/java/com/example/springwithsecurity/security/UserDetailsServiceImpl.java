@@ -14,10 +14,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
     @Override
-    public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(username);
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username);
         if(user != null) {
-            return new UserDetailsImpl(user.get());
+            return new CustomUserDetails(user);
         } else {
             throw  new UsernameNotFoundException("User with email" + username + " does not exist!");
         }
