@@ -66,7 +66,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/api/login", "/user/refresh-token/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/login", "/api/register", "/user/refresh-token/**").permitAll();
         http.authorizeRequests().antMatchers("/api/greeting").hasAnyAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers("/api/hello").hasAnyAuthority( "ROLE_ADMIN","ROLE_USER");
         http.authorizeRequests().anyRequest().authenticated();
