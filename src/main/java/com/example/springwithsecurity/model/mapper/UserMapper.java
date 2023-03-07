@@ -26,8 +26,8 @@ public class UserMapper {
     }
 
     public static User toUser(CreateUserRequest createUserRequest) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(new Role("ROLE_USER"));
+//        Set<Role> roles = new HashSet<>();
+//        roles.add(new Role("ROLE_USER"));
         User user = new User();
         user.setFullName(createUserRequest.getFullName());
         user.setEmail(createUserRequest.getEmail());
@@ -37,7 +37,7 @@ public class UserMapper {
         user.setPhone(createUserRequest.getPhone());
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         user.setStatus(true);
-        user.setRoles(roles);
+//        user.setRoles(roles);
         return user;
     }
 }
