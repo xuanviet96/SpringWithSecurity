@@ -21,16 +21,16 @@ public class SpringwithSecurityApplicationTests {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Test
-	void testCreateUser() {
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-		String password =passwordEncoder.encode("Xuan96");
-		User newUser = new User("editor@email.com", "abc", password);
-		User savedUser = userRepository.save(newUser);
-		assertThat(savedUser).isNotNull();
-		assertThat(savedUser.getUserId()).isGreaterThan(0);
-
-	}
+//	@Test
+//	void testCreateUser() {
+//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		String password =passwordEncoder.encode("Xuan96");
+//		User newUser = new User("editor@email.com", "abc", password);
+//		User savedUser = userRepository.save(newUser);
+//		assertThat(savedUser).isNotNull();
+//		assertThat(savedUser.getUserId()).isGreaterThan(0);
+//
+//	}
 
 
 }

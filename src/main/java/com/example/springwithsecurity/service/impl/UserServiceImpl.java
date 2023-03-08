@@ -4,6 +4,7 @@ import com.example.springwithsecurity.entity.Role;
 import com.example.springwithsecurity.entity.User;
 import com.example.springwithsecurity.exception.BadRequestException;
 import com.example.springwithsecurity.exception.InternalServerException;
+import com.example.springwithsecurity.exception.NotFoundException;
 import com.example.springwithsecurity.model.dto.UserDTO;
 import com.example.springwithsecurity.model.mapper.UserMapper;
 import com.example.springwithsecurity.model.request.ChangePasswordRequest;
@@ -11,6 +12,7 @@ import com.example.springwithsecurity.model.request.CreateUserRequest;
 import com.example.springwithsecurity.model.request.UpdateProfileRequest;
 import com.example.springwithsecurity.repository.RoleRepository;
 import com.example.springwithsecurity.repository.UserRepository;
+import com.example.springwithsecurity.security.JwtTokenUtil;
 import com.example.springwithsecurity.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,8 @@ import static com.example.springwithsecurity.config.Contant.LIMIT_USER;
 @Service
 public class UserServiceImpl implements UserService {
 
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
     @Autowired
     RoleRepository roleRepository;
 
@@ -59,14 +62,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(CreateUserRequest createUserRequest) {
         String roleName = "ROLE_USER";
-        Role roleUser = roleRepository.findByRoleName(roleName).get();
+        Optional<Role> roleUser = roleRepository.findByRoleName(roleName);
 
-        User user = userRepository.findByEmail(createUserRequest.getEmail());
-        if(user != null) {
+        if(roleUser.isEmpty()) {
+            throw new NotFoundException("User role not found !");
+        }
+
+        Optional<User> optionalUser = userRepository.findByEmail(createUserRequest.getEmail());
+        if(optionalUser.isPresent()) {
             throw new BadRequestException("User email already exist !");
         }
-        user = UserMapper.toUser(createUserRequest);
-        user.setRoles(new HashSet<>(List.of(roleUser)));
+
+        User user = UserMapper.toUser(createUserRequest);
+        user.setRoles(new HashSet<>(List.of(roleUser.get())));
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
         try {
@@ -91,6 +99,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateProfile(User user, UpdateProfileRequest updateProfileRequest) {
         return null;
+    }
+
+    @Override
+    public User getUserByToken(String token) {
+        String username = jwtTokenUtil.getSubject(token);
+        Optional<User> user = userRepository.findByEmail(username);
+        if(user.isEmpty()) {
+            throw new NotFoundException("user does not exist");
+        }
+        return user.get();
     }
 
 }

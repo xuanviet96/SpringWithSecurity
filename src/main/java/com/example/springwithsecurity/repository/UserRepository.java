@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     @Query(value = "SELECT * " +
             "FROM users u WHERE u.full_name LIKE CONCAT('%',?1,'%') " +

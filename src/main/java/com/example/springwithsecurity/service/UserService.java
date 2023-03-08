@@ -21,5 +21,6 @@ public interface UserService {
 
     User updateProfile(User user, UpdateProfileRequest updateProfileRequest);
 
+    User getUserByToken(String token);
 
 }
