@@ -47,7 +47,7 @@ public class User {
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
     @ManyToMany (cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
-            fetch = FetchType.EAGER)
+                fetch = FetchType.EAGER)
     @JoinTable (name = "users_roles",
             joinColumns = @JoinColumn (name = "user_id"),
             inverseJoinColumns = @JoinColumn (name = "role_id"))
