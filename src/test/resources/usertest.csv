@@ -1,0 +1,9 @@
+testCaseId, userName, password, newPassword, fullname, phone, address
+sendRegistrationSuccessRequest, testUser@email.com, testPassword,,viet xuan, 0972385919, ha noi
+sendRegistrationDuplicateEmailRequest, user3@email.com, thanhtu123,,viet xuan, 0972385919, ha noi
+getCSVDataForJwtTokenSuccess, testUser@email.com, testPassword,,,,
+getCSVDataForJwtTokenFail, testUser, wrongPassword,,,,
+getCSVDataForChangePasswordFail, testUser, wrongPassword, newPassword,,,
+getCSVDataForChangePasswordSuccess, testUser, testPassword, newPassword,,,
+getCSVDataForTestUser, testUser, newPassword,,,,
+

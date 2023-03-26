@@ -1,31 +1,36 @@
 package com.example.springwithsecurity.controller;
 
+import com.example.springwithsecurity.entity.User;
 import com.example.springwithsecurity.entity.api.AuthResponse;
 import com.example.springwithsecurity.entity.api.LoginRequest;
+import com.example.springwithsecurity.model.mapper.UserMapper;
+import com.example.springwithsecurity.model.request.ChangePasswordRequest;
+import com.example.springwithsecurity.model.request.CreateUserRequest;
 import com.example.springwithsecurity.security.JwtTokenUtil;
-import com.example.springwithsecurity.security.UserDetailsImpl;
+import com.example.springwithsecurity.security.CustomUserDetails;
+import com.example.springwithsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+
 
 
 @RestController
 public class UserController {
+
+    @Autowired
+    private UserService userService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
@@ -37,7 +42,7 @@ public class UserController {
                     loginRequest.getEmail(),
                     loginRequest.getPassword()));
             // Gen token
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
             String token = jwtTokenUtil.generateToken(userDetails);
 
             List<String> roles = jwtTokenUtil.getClaims(token);
@@ -47,6 +52,31 @@ public class UserController {
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @GetMapping("/api/admin/users/list")
+    public ResponseEntity<Object> getListUserPages(@RequestParam(defaultValue = "", required = false) String fullName,
+                                                   @RequestParam(defaultValue = "", required = false) String phone,
+                                                   @RequestParam(defaultValue = "", required = false) String email,
+                                                   @RequestParam(defaultValue = "", required = false) String address,
+                                                   @RequestParam(defaultValue = "1", required = false) Integer page) {
+        Page<User> users = userService.adminListUserPages(fullName, phone, email, page);
+        return ResponseEntity.ok(users);
+    }
+    @PostMapping("/api/register")
+    public ResponseEntity<Object> register(@Valid @RequestBody CreateUserRequest createUserRequest) {
+        //Create user
+        User user = userService.createUser(createUserRequest);
+        //Gen token
+//        CustomUserDetails principal = new CustomUserDetails(user);
+//        String token = jwtTokenUtil.generateToken(principal);
+        return ResponseEntity.ok(UserMapper.toUserDTO(user));
+    }
+    @PostMapping("/api/change-password")
+    public ResponseEntity<Object> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
+        User user = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        userService.changePassword(user, changePasswordRequest);
+        return ResponseEntity.ok("password changed successfully");
     }
     @GetMapping("/api/greeting")
 //    @PreAuthorize("hasAnyAuthority('ROLE_USER')")
