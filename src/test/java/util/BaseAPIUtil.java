@@ -1,15 +1,12 @@
 package util;
 
 
+import com.sun.jersey.api.client.Client;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
+
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 import static org.testng.Assert.*;
@@ -53,7 +50,7 @@ public class BaseAPIUtil {
                 .post(Entity.entity(object, MediaType.APPLICATION_JSON));
 
         if (httpStatus == 200) {
-            assertEquals(response.getStatus(), 200);
+            assertEquals(response.getStatus(), HttpStatus.OK);
         } else {
             assertNotEquals(response.getStatus(), 200);
         }
