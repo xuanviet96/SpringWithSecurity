@@ -17,6 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "FROM users u WHERE u.full_name LIKE CONCAT('%',?1,'%') " +
             "AND u.phone LIKE CONCAT('%',?2,'%') " +
             "AND u.email LIKE CONCAT('%',?3,'%') ",nativeQuery = true)
-    Page<User> adminListUserPages(String fullName, String phone, String email, Pageable pageable);
+    Page<User> adminListUserPages(String fullName, String phone, String email, String address, Pageable pageable);
 
 }

@@ -54,15 +54,15 @@ public class UserController {
         }
     }
 
-    @GetMapping("/api/admin/users/list")
-    public ResponseEntity<Object> getListUserPages(@RequestParam(defaultValue = "", required = false) String fullName,
-                                                   @RequestParam(defaultValue = "", required = false) String phone,
-                                                   @RequestParam(defaultValue = "", required = false) String email,
-                                                   @RequestParam(defaultValue = "", required = false) String address,
-                                                   @RequestParam(defaultValue = "1", required = false) Integer page) {
-        Page<User> users = userService.adminListUserPages(fullName, phone, email, page);
-        return ResponseEntity.ok(users);
-    }
+//    @GetMapping("/api/admin/users/list")
+//    public ResponseEntity<Object> getListUserPages(@RequestParam(defaultValue = "", required = false) String fullName,
+//                                                   @RequestParam(defaultValue = "", required = false) String phone,
+//                                                   @RequestParam(defaultValue = "", required = false) String email,
+//                                                   @RequestParam(defaultValue = "", required = false) String address,
+//                                                   @RequestParam(defaultValue = "1", required = false) Integer page) {
+//        Page<User> users = userService.adminListUserPages(fullName, phone, email, page);
+//        return ResponseEntity.ok(users);
+//    }
     @PostMapping("/api/register")
     public ResponseEntity<Object> register(@Valid @RequestBody CreateUserRequest createUserRequest) {
         //Create user

@@ -6,6 +6,7 @@ import com.example.springwithsecurity.model.request.ChangePasswordRequest;
 import com.example.springwithsecurity.model.request.CreateUserRequest;
 import com.example.springwithsecurity.model.request.UpdateProfileRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ import java.util.Optional;
 public interface UserService {
     List<UserDTO> getListUsers();
 
-    Page<User> adminListUserPages(String fullName, String phone, String email, Integer page);
+    Page<User> adminListUserPages(String fullName, String phone, String email, String address, Integer page, String field, Sort.Direction sortDirection);
 
     User createUser(CreateUserRequest createUserRequest);
 
