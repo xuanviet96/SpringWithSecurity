@@ -17,6 +17,7 @@ public interface UserService {
     Page<User> adminListUserPages(String fullName, String phone, String email, String address, Integer page, String field, Sort.Direction sortDirection);
 
     User createUser(CreateUserRequest createUserRequest);
+    User getUserById(long id);
 
     void changePassword(User user, ChangePasswordRequest changePasswordRequest);
 
@@ -24,4 +25,5 @@ public interface UserService {
 
     User getUserByToken(String token);
 
+    void deleteUserById(Long id);
 }

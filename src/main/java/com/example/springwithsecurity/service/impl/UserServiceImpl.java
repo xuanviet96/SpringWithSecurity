@@ -16,6 +16,7 @@ import com.example.springwithsecurity.security.JwtTokenUtil;
 import com.example.springwithsecurity.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
+
     @Override
     public List<UserDTO> getListUsers() {
         return null;
@@ -57,9 +59,9 @@ public class UserServiceImpl implements UserService {
         }
         Sort sort = Sort.by(sortDirection, sortField);
         Pageable pageable = PageRequest.of(1, LIMIT_USER, sort);
-        if(page > pageable.getPageSize()) {
+        if (page > pageable.getPageSize()) {
             int pageSize = pageable.getPageSize();
-            pageable = PageRequest.of(pageSize-1, LIMIT_USER, sort);
+            pageable = PageRequest.of(pageSize - 1, LIMIT_USER, sort);
         } else {
             pageable = PageRequest.of(page, LIMIT_USER, sort);
         }
@@ -71,12 +73,12 @@ public class UserServiceImpl implements UserService {
         String roleName = "ROLE_USER";
         Optional<Role> roleUser = roleRepository.findByRoleName(roleName);
 
-        if(roleUser.isEmpty()) {
+        if (roleUser.isEmpty()) {
             throw new NotFoundException("User role not found !");
         }
 
         Optional<User> optionalUser = userRepository.findByEmail(createUserRequest.getEmail());
-        if(optionalUser.isPresent()) {
+        if (optionalUser.isPresent()) {
             throw new BadRequestException("User email already exist !");
         }
 
@@ -93,9 +95,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User id is not exist");
+        }
+        return user.get();
+    }
+
+    @Override
     public void changePassword(User user, ChangePasswordRequest changePasswordRequest) {
         //Check password
-        if(!BCrypt.checkpw(changePasswordRequest.getOldPassword(), user.getPassword())) {
+        if (!BCrypt.checkpw(changePasswordRequest.getOldPassword(), user.getPassword())) {
             throw new BadRequestException("The old password is not correct !");
         }
         String hash = BCrypt.hashpw(changePasswordRequest.getNewPassword(), BCrypt.gensalt(12));
@@ -112,10 +123,24 @@ public class UserServiceImpl implements UserService {
     public User getUserByToken(String token) {
         String username = jwtTokenUtil.getSubject(token);
         Optional<User> user = userRepository.findByEmail(username);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             throw new NotFoundException("user does not exist");
         }
         return user.get();
     }
+
+    @Override
+    public void deleteUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User id is not exist");
+        }
+        try {
+            userRepository.delete(user.get());
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -6,6 +6,7 @@ import com.example.springwithsecurity.entity.api.LoginRequest;
 import com.example.springwithsecurity.model.mapper.UserMapper;
 import com.example.springwithsecurity.model.request.ChangePasswordRequest;
 import com.example.springwithsecurity.model.request.CreateUserRequest;
+import com.example.springwithsecurity.model.request.UpdateProfileRequest;
 import com.example.springwithsecurity.security.JwtTokenUtil;
 import com.example.springwithsecurity.security.CustomUserDetails;
 import com.example.springwithsecurity.service.UserService;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -77,6 +79,16 @@ public class UserController {
         User user = ((CustomUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
         userService.changePassword(user, changePasswordRequest);
         return ResponseEntity.ok("password changed successfully");
+    }
+    @PutMapping("/api/update-profile")
+    public ResponseEntity<Object> updateProfile(@Valid @RequestBody UpdateProfileRequest profileReq) {
+        User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
+        user = userService.updateProfile(user, profileReq);
+        UserDetails userDetails = new CustomUserDetails(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return ResponseEntity.ok("Cập nhật thành công");
     }
     @GetMapping("/api/greeting")
 //    @PreAuthorize("hasAnyAuthority('ROLE_USER')")

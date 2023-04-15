@@ -18,7 +18,6 @@ public class UpdateProfileRequest {
     private String phone;
 
     @NotBlank(message = "Họ tên trống")
-    @JsonProperty("full_name")
     private String fullName;
 
     private String address;
