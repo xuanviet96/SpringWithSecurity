@@ -14,5 +14,5 @@ import java.util.Map;
 public class ApiResponse<T>{
     private String status;
     private Pagination pagination;
-    private List<T> entity;
+    private List<T> data;
 }
