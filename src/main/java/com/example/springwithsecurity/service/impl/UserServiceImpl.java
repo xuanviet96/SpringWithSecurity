@@ -17,10 +17,7 @@ import com.example.springwithsecurity.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +26,7 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.example.springwithsecurity.config.Contant.LIMIT_USER;
 
@@ -47,8 +45,19 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public List<UserDTO> getListUsers() {
-        return null;
+    public Page<UserDTO> getListUserDTOs(String fullName, String phone, String email, String address, Integer page, String sortField, Sort.Direction sortDirection) {
+        page--;
+        if (page < 0) {
+            page = 0;
+        }
+        Sort sort = Sort.by(sortDirection, sortField);
+        Pageable pageable = PageRequest.of(page, LIMIT_USER, sort);
+        Page<User> usersPage = userRepository.adminListUserPages(fullName, phone, email, address, pageable);
+        List<UserDTO> userDTOs = usersPage.getContent()
+                .stream()
+                .map(user -> UserMapper.toUserDTO(user))
+                .collect(Collectors.toList());
+        return new PageImpl<>(userDTOs, pageable, usersPage.getTotalElements());
     }
 
     @Override

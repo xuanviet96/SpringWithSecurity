@@ -3,6 +3,7 @@ package com.example.springwithsecurity.controller;
 import com.example.springwithsecurity.entity.User;
 import com.example.springwithsecurity.model.dto.ApiResponse;
 import com.example.springwithsecurity.model.dto.Pagination;
+import com.example.springwithsecurity.model.dto.UserDTO;
 import com.example.springwithsecurity.model.request.CreateUserRequest;
 import com.example.springwithsecurity.model.request.UpdateProfileRequest;
 import com.example.springwithsecurity.service.UserService;
@@ -35,7 +36,7 @@ public class AdminUserController {
                                                    @RequestParam(defaultValue = "ASC", required = false) Sort.Direction sortDirection){
         Page<User> users = userService.adminListUserPages(fullName, phone, email, address, page, sortField, sortDirection);
         Pagination pagination;
-        pagination = new Pagination((int)users.getTotalElements(), LIMIT_USER, page, users.getTotalPages());
+        pagination = new Pagination((int) users.getTotalElements(), LIMIT_USER, page, users.getTotalPages());
         ApiResponse response = new ApiResponse("success", pagination, users.getContent());
         return ResponseEntity.ok(response);
     }
@@ -62,5 +63,19 @@ public class AdminUserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping(value = "/api/userDTO")
+    public ResponseEntity<Object> getListUserDTOPages(@RequestParam(defaultValue = "", required = false) String fullName,
+                                                          @RequestParam(defaultValue = "", required = false) String phone,
+                                                          @RequestParam(defaultValue = "", required = false) String email,
+                                                          @RequestParam(defaultValue = "", required = false) String address,
+                                                          @RequestParam(defaultValue = "1", required = false) Integer page,
+                                                          @RequestParam(defaultValue = "created_at", required = false) String sortField,
+                                                          @RequestParam(defaultValue = "ASC", required = false) Sort.Direction sortDirection){
+        Page<UserDTO> userDTOs = userService.getListUserDTOs(fullName, phone, email, address, page, sortField, sortDirection);
+        Pagination pagination;
+        pagination = new Pagination((int) userDTOs.getTotalElements(), LIMIT_USER, page, userDTOs.getTotalPages());
+        ApiResponse response = new ApiResponse("success", pagination, userDTOs.getContent());
+        return ResponseEntity.ok(response);
     }
 }

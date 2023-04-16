@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> getListUsers();
+    Page<UserDTO> getListUserDTOs(String fullName, String phone, String email, String address, Integer page, String sortField, Sort.Direction sortDirection);
 
     Page<User> adminListUserPages(String fullName, String phone, String email, String address, Integer page, String field, Sort.Direction sortDirection);
 
