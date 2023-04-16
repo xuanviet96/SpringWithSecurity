@@ -12,7 +12,7 @@ public class CustomExceptionHandler {
     public ResponseEntity<Object> handlerInternalServerException(InternalServerException ex, WebRequest request) {
         //Log error
         ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(error, error.getHttpStatus());
     }
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {

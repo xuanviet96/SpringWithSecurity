@@ -11,8 +11,8 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiResponse{
+public class ApiResponse<T>{
     private String status;
     private Pagination pagination;
-    private List<User> users;
+    private List<T> entity;
 }

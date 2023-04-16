@@ -58,10 +58,11 @@ public class UserServiceImpl implements UserService {
             page = 0;
         }
         Sort sort = Sort.by(sortDirection, sortField);
-        Pageable pageable = PageRequest.of(1, LIMIT_USER, sort);
-        if (page > pageable.getPageSize()) {
-            int pageSize = pageable.getPageSize();
-            pageable = PageRequest.of(pageSize - 1, LIMIT_USER, sort);
+        Pageable pageable = PageRequest.of(page, LIMIT_USER, sort);
+        Page<User> usersPage = userRepository.adminListUserPages(fullName, phone, email, address, pageable);
+        int totalPage = usersPage.getTotalPages();
+        if (page > totalPage) {
+            pageable = PageRequest.of(totalPage - 1, LIMIT_USER, sort);
         } else {
             pageable = PageRequest.of(page, LIMIT_USER, sort);
         }
