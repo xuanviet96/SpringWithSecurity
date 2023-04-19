@@ -56,15 +56,6 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/api/admin/users/list")
-//    public ResponseEntity<Object> getListUserPages(@RequestParam(defaultValue = "", required = false) String fullName,
-//                                                   @RequestParam(defaultValue = "", required = false) String phone,
-//                                                   @RequestParam(defaultValue = "", required = false) String email,
-//                                                   @RequestParam(defaultValue = "", required = false) String address,
-//                                                   @RequestParam(defaultValue = "1", required = false) Integer page) {
-//        Page<User> users = userService.adminListUserPages(fullName, phone, email, page);
-//        return ResponseEntity.ok(users);
-//    }
     @PostMapping("/api/register")
     public ResponseEntity<Object> register(@Valid @RequestBody CreateUserRequest createUserRequest) {
         //Create user
@@ -83,7 +74,8 @@ public class UserController {
     @PutMapping("/api/update-profile")
     public ResponseEntity<Object> updateProfile(@Valid @RequestBody UpdateProfileRequest profileReq) {
         User user = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
-        user = userService.updateProfile(user, profileReq);
+        Long userId = user.getId();
+        user = userService.updateProfile(userId, profileReq);
         UserDetails userDetails = new CustomUserDetails(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);

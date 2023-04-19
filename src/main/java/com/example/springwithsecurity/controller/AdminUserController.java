@@ -52,11 +52,7 @@ public class AdminUserController {
     }
     @PutMapping(value = "/api/admin/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
-        User user = userService.getUserById(id);
-        user.setPhone(updateProfileRequest.getPhone());
-        user.setFullName(updateProfileRequest.getFullName());
-        user.setAddress(updateProfileRequest.getAddress());
-        user.setModifiedAt(new Timestamp(System.currentTimeMillis()));
+        User user = userService.updateProfile(id, updateProfileRequest);
         return ResponseEntity.ok(user);
     }
     @DeleteMapping(value = "/api/admin/users/{id}")

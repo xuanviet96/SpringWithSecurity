@@ -18,4 +18,5 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
             "AND b.status LIKE CONCAT('%',?3,'%')", nativeQuery = true)
     Page<Brand> adminGetListBrands(String id, String name, String status, Pageable pageable);
 
+
 }

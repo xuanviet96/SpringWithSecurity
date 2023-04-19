@@ -1,9 +1,6 @@
 package com.example.springwithsecurity.model.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,8 +9,7 @@ import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class CreateUserRequest {
     @NotBlank(message = "Họ tên trống")
     private String fullName;

@@ -21,4 +21,10 @@ public class CustomExceptionHandler {
         ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, message, uri);
         return new ResponseEntity<>(apiError, apiError.getHttpStatus());
     }
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Object> handlerBadRequestException(BadRequestException ex, WebRequest request) {
+        //Log error
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(error, error.getHttpStatus());
+    }
 }

@@ -20,7 +20,7 @@ public interface UserService {
 
     void changePassword(User user, ChangePasswordRequest changePasswordRequest);
 
-    User updateProfile(User user, UpdateProfileRequest updateProfileRequest);
+    User updateProfile(Long id, UpdateProfileRequest updateProfileRequest);
 
     User getUserByToken(String token);
 

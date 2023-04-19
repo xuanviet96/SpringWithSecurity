@@ -4,14 +4,15 @@ import com.example.springwithsecurity.entity.Brand;
 import com.example.springwithsecurity.entity.User;
 import com.example.springwithsecurity.model.dto.ApiResponse;
 import com.example.springwithsecurity.model.dto.Pagination;
+import com.example.springwithsecurity.model.request.CreateBrandRequest;
 import com.example.springwithsecurity.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static com.example.springwithsecurity.config.Contant.LIMIT_BRAND;
 
@@ -31,6 +32,11 @@ public class BrandController {
         pagination = new Pagination((int) brands.getTotalElements(), LIMIT_BRAND, page, brands.getTotalPages());
         ApiResponse response = new ApiResponse("success", pagination, brands.getContent());
         return ResponseEntity.ok(response);
+    }
+    @PostMapping(value = "/api/admin/brands")
+    public ResponseEntity<Brand> createBrand(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
+        Brand brand = brandService.createBrand(createBrandRequest);
+        return ResponseEntity.ok(brand);
     }
 
 }

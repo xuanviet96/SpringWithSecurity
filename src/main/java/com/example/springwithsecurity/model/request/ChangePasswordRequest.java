@@ -1,18 +1,14 @@
 package com.example.springwithsecurity.model.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 public class ChangePasswordRequest {
     @NotBlank(message = "Mật khẩu cũ trống")
     @Size(min = 6, max = 20, message = "Mật khẩu phải chứa từ 4 - 20 ký tự")
